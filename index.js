@@ -2,6 +2,7 @@ const config = require('./config.json');
 const express = require('express');
 const app = express();
 const http = require('http');
+const util = require('./util.js');
 
 
 app.all('*', (req, res, next) => {
@@ -35,9 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use('*', (req, res, next) => {
-    res.status(400).json({
-        'error': 'This route is not available.'
-    }).end();
+    res.status(400).json(util.getError("Could not access endpoint")).end();
 });
 
 //Define port
