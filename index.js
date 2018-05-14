@@ -1,25 +1,7 @@
 const config = require('./config.json');
-const dbconf = require('./db/dbconfig.json');
 const express = require('express');
 const app = express();
 const http = require('http');
-const mysql = require('mysql');
-
-let con = mysql.createConnection({
-    host: dbconf.dbServer,
-    user: dbconf.dbUsername,
-    password: dbconf.dbPassword,
-    database: dbconf.dbSchema
-});
-
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-    con.query("SELECT * FROM maaltijd", function (err, result, fields) {
-        if (err) throw err;
-        console.log(fields);
-    });
-});
 
 
 app.all('*', (req, res, next) => {
