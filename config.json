@@ -1,8 +1,3 @@
 {
-  "secretkey" : "MyServerSuperSecretKey-123454321AbCd-",
-  "dbUsername": "nodeapp",
-  "dbPassword": "70xHywPS9NHy",
-  "dbSchema"  : "sakila",
-  "dbServer"  : "localhost",
-  "port"      : "3000"
+  "port"      : "8080"
 }
