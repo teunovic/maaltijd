@@ -18,12 +18,11 @@ router.post('/login', (req, res) => {
         }
         else
         {
-            let newToken = auth.encodeToken(result[0]['Email']);
+            let newToken = auth.encodeToken(result[0]['Id']);
             res.status(200).json({
                 "token": newToken,
                 "email" : result[0]['Email']
             }).end();
-            db.query("UPDATE user SET token = ? WHERE Id = '")
         }
     });
 
