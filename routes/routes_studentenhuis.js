@@ -19,8 +19,8 @@ router.get('/studentenhuis:id?', (req, resp) => {
         db.query("SELECT * FROM studentenhuis", (err, result, fields) => {
             if (err) console.error(err);
             resp.json(result);
-            xd = result.filter(function (item) {
-                return (item.info.id === xd);
+            newresult = result.filter(function (item) {
+                return (item.info.id === newresult);
             });
         })
     }
