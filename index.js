@@ -2,6 +2,23 @@ const config = require('./config.json');
 const express = require('express');
 const app = express();
 const http = require('http');
+const mysql = require('mysql');
+
+let con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "studentenhuis"
+});
+
+con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+    con.query("SELECT * FROM maaltijd", function (err, result, fields) {
+        if (err) throw err;
+        console.log(fields);
+    });
+});
 
 
 app.all('*', (req, res, next) => {
