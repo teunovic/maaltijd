@@ -7,7 +7,6 @@ const router    =       express.Router();
 
 
 // Fall back, display some info
-
 router.get('*', (req, res) => {
     res.status(200);
     res.json({
