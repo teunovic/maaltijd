@@ -3,12 +3,12 @@ const moment = require('moment');
 const jwt = require('jwt-simple');
 
 function encodeToken(username) {
-    const playload = {
+    const payload = {
         exp: moment().add(10, 'days').unix(),
         iat: moment().unix(),
         sub: username
     };
-    return jwt.encode(playload, settings.secretkey);
+    return jwt.encode(payload, settings.secretkey);
 }
 
 function decodeToken(token, cb) {

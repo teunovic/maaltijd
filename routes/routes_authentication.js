@@ -5,6 +5,7 @@ const db = require('../db/mysql-connection.js');
 const util = require('../util.js');
 const auth = require('../auth/authentication.js');
 
+
 router.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -34,18 +35,11 @@ router.post('/register', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?", [firstname, lastname, email, password], (err, result, fields) =>{
-    if (err) console.error(err);
-    if(result.length !==1)
-    {
-        res.status(412).json(util.getError("Invalid credentials"));
-    }
-    else {
+    db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)", [firstname, lastname, email, password]);
         res.status(200).json({
-            "email": result[0]['Email'],
-            "token": auth.encodeToken(result[0]['Email'])
+            "token": auth.encodeToken([email]),
+            "email": email
         });
-    }});
 });
 module.exports = router;
 
