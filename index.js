@@ -9,7 +9,7 @@ app.all('*', (req, res, next) => {
 });
 
 
-app.use('/apiv1', require('./routes/routes_apiv1.js'));
+app.use('/api', require('./routes/routes_apiv1.js'));
 
 // Handle all errors
 app.use((err, req, res, next) => {

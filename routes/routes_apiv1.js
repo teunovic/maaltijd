@@ -8,7 +8,6 @@ const router    =       express.Router();
 
 // Fall back, display some info
 
-
 router.get('*', (req, res) => {
     res.status(200);
     res.json({
@@ -16,10 +15,10 @@ router.get('*', (req, res) => {
     });
 });
 
-// app.get('/maaltijd', (req, resp) => {
-//     resp.json({
-//         'msg': 'test'});
-// });
+router.get('/maaltijd', (req, resp) => {
+    resp.json({
+        'msg': 'test'});
+});
 
 module.exports = router;
 
