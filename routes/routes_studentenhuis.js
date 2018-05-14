@@ -4,7 +4,7 @@ const router = express.Router();
 const db = require('../db/mysql-connection.js');
 const util = require('../util.js');
 
-router.get('/studentenhuis/:id?', (req, resp) => {
+router.get('/:id?', (req, resp) => {
     const id = req.params.id;
     if(!id) {
         db.query("SELECT * FROM studentenhuis", (err, result, fields) => {
