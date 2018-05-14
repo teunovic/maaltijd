@@ -2,11 +2,11 @@ const settings = require('../config.json');
 const moment = require('moment');
 const jwt = require('jwt-simple');
 
-function encodeToken(username) {
+function encodeToken(id) {
     const payload = {
         exp: moment().add(10, 'days').unix(),
         iat: moment().unix(),
-        sub: username
+        userid: id + ''
     };
     return jwt.encode(payload, settings.secretkey);
 }

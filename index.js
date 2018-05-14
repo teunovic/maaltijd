@@ -28,8 +28,9 @@ app.all('*', (req, res, next) => {
                 res.status(401).json(util.getError("Token is invalid")).end();
             }
             else {
-                let uid = payload.sub;
-                db.query("SELECT * FROM user WHERE Id = ? LIMIT 1", [uid], (err, results, fields) => {
+                let uid = payload.userid;
+                console.log(payload);
+                db.query("SELECT * FROM user WHERE ID = ? LIMIT 1", [uid], (err, results, fields) => {
                     if(err) console.error(err);
                     if(results.length !== 1) {
                         res.status(401).json(util.getError("Token has expired")).end();

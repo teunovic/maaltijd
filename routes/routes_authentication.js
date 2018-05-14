@@ -18,7 +18,8 @@ router.post('/login', (req, res) => {
         }
         else
         {
-            let newToken = auth.encodeToken(result[0]['Id']);
+            console.log(result[0]);
+            let newToken = auth.encodeToken(result[0]['ID']);
             res.status(200).json({
                 "token": newToken,
                 "email" : result[0]['Email']
