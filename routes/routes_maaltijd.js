@@ -40,7 +40,7 @@ router.post('/:id?/maaltijd', (req, res, next) => {
     let maaltijd = req.body;
 
     const query = {
-        sql: 'INSERT INTO `maaltijd`(naam, beschrijving, ingredienten, allergie, prijs) VALUES (?, ?, ?, ?, ?)',
+        sql: 'INSERT INTO `maaltijd`(Naam, Beschrijving, Ingredienten, Allergie, Prijs) VALUES (?, ?, ?, ?, ?)',
         values: [maaltijd.naam, maaltijd.beschrijving, maaltijd.ingredienten, maaltijd.allergie, maaltijd.prijs],
         timeout: 2000
     };

@@ -19,16 +19,34 @@ router.post('/login', (req, res) => {
         {
             let newToken = auth.encodeToken(result[0]['Email']);
             res.status(200).json({
-                "email" : result[0]['Email'],
-                "token": newToken
+                "token": newToken,
+                "email" : result[0]['Email']
             }).end();
             db.query("UPDATE user SET token = ? WHERE Id = '")
         }
     });
 
 });
+router.post('/register', (req, res) => {
+    // TODO: Registration
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const email = req.body.email;
+    const password = req.body.password;
 
-
+    db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?", [firstname, lastname, email, password], (err, result, fields) =>{
+    if (err) console.error(err);
+    if(result.length !==1)
+    {
+        res.status(412).json(util.getError("Invalid credentials"));
+    }
+    else {
+        res.status(200).json({
+            "email": result[0]['Email'],
+            "token": auth.encodeToken(result[0]['Email'])
+        });
+    }});
+});
 module.exports = router;
 
 
