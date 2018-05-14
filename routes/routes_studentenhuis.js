@@ -6,6 +6,8 @@ const util = require('../util.js');
 
 router.get('/:id?', (req, resp) => {
     const id = req.params.id;
+
+    console.log("EWA NEEF " + resp.locals.user['Voornaam'] + resp.locals.user['Achternaam']);
     if(!id) {
         db.query("SELECT * FROM studentenhuis", (err, result, fields) => {
             if (err) console.error(err);

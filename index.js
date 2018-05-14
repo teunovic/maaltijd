@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const util = require('./util.js');
+const auth = require('./auth/authentication.js');
 const db = require('./db/mysql-connection.js');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,23 +18,27 @@ app.all('*', (req, res, next) => {
     let token = req.get('Authorization');
     if(!token)
     {
-        res.status(401).json(util.getError("No authentication headers were sent")).end();
+        res.status(401).json(util.getError("No token was sent")).end();
     }
     else
     {
-        db.query("SELECT * FROM user WHERE token = ?", [token], (err, results, fields) => {
-            if(err) console.error(err);
-            if(results.length !== 1)
-            {
-                res.status(500).json(util.getError("Invalid auth token, please authenticate on /api/login"));
+        auth.decodeToken(token, (err, payload) => {
+            if(err) {
+                console.error(err);
+                res.status(401).json(util.getError("Token is invalid")).end();
             }
-            else
-            {
-                
+            else {
+                let email = payload.sub;
+                db.query("SELECT * FROM user WHERE Email = ? LIMIT 1", [email], (err, results, fields) => {
+                    if(err) console.error(err);
+                    if(results.length !== 1) {
+                        res.status(401).json(util.getError("Token has expired")).end();
+                    }
+                    res.locals.user = results[0];
+                    next();
+                });
             }
-            next();
         });
-
     }
 });
 
@@ -42,15 +47,6 @@ app.use('/api/studentenhuis', require('./routes/routes_studentenhuis.js'));
 app.use('/api/studentenhuis', require('./routes/routes_deelnemers.js'));
 app.use('/api/studentenhuis', require('./routes/routes_maaltijd.js'));
 
-
-
-// Handle all errors
-app.use((err, req, res, next) => {
-
-    console.log(err.toString());
-
-    res.status(500).json(util.getError(err.toString())).end();
-});
 
 app.use('*', (req, res, next) => {
     res.status(400).json(util.getError("Could not access endpoint")).end();

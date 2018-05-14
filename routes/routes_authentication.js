@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/mysql-connection.js');
 const util = require('../util.js');
+const auth = require('../auth/authentication.js');
 
 router.post('/login', (req, res) => {
     const email = req.body.email;
@@ -16,7 +17,7 @@ router.post('/login', (req, res) => {
         }
         else
         {
-            let newToken = "2134I@U#HO@2o";
+            let newToken = auth.encodeToken(result[0]['Email']);
             res.status(200).json({
                 "email" : result[0]['Email'],
                 "token": newToken
