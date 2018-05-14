@@ -5,11 +5,12 @@ const http = require('http');
 
 
 app.all('*', (req, res, next) => {
+    console.log(req.method + " " + req.url);
     next();
 });
 
-// Define different version of routes
-app.use('/api/studentenhuis', require('./routes/routes_studentenhuis.js'));
+// Define different versions of routes
+app.use('/api', require('./routes/routes_studentenhuis.js'));
 // app.use('/api/deelnemers', require('./routes/routes_deelnemers.js'));
 // app.use('/api/maaltijd', require('./routes/routes_maaltijd'));
 // app.use('/api/authentication', require('./routes/routes_authentication'));
