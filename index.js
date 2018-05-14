@@ -14,11 +14,17 @@ app.use('/api', require('./routes/routes_authentication.js'));
 // Check authentication for all other endpoints
 app.all('*', (req, res, next) => {
     console.log(req.method + " " + req.url);
+    let token = req.get('Authorization');
+    if(!token)
+    {
+        res.status(401).json(util.getError("No authentication headers were sent"));
+    }
+    else
+    {
+        db.query("SELECT * FROM user WHERE token = ?", [token]);
 
-    req.
-    db.query("SELECT * FROM user WHERE token = ?", [])
-
-    next();
+        next();
+    }
 });
 
 // Define different versions of routes
