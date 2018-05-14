@@ -37,36 +37,58 @@ router.post('/register', (req, res, next) => {
     const password = req.body.password || '';
 
     // Checking if first- and last name are valid
-    if(!firstname.match(/\w+(-\w+)?/))
+    if(!(typeof firstname === 'string') || firstname == '' || !firstname.match(/\w+(-\w+)?/))
     {
-        res.status(412).json(util.getError("First nam")).end();
+        res.status(412).json(util.getError("First name is invalid", 1)).end();
         return;
     }
-    if(!lastname.match(/\w+(-\w+)?/))
+    if(!(typeof lastname === 'string') || lastname == '' || !lastname.match(/\w+(-\w+)?/))
     {
-        res.status(412).json(util.getError("Something went wrong with the database insert")).end();
+        res.status(412).json(util.getError("Last name is invalid", 2)).end();
+        return;
+    }
+
+    if(!(typeof email === 'string') || email == '' || !email.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i))
+    {
+        res.status(412).json(util.getError("Email is invalid", 3)).end();
+        return;
+    }
+
+    if(!(typeof password === 'string') || password == '' || password.length < 6 || password.length > 64)
+    {
+        res.status(412).json(util.getError("Password must be between 6 and 64 characters", 3)).end();
         return;
     }
 
     // Checking if the email is unique
-    db.query("SELECT ID FROM user WHERE Email = ? LIMIT 1", [email], )
+    db.query("SELECT ID FROM user WHERE Email = ? LIMIT 1", [email], (_err, _res) => {
+        if(_err || _res.length === 1) {
+            console.error(_err || 'Email taken');
+            res.status(412).json(util.getError("Email is taken", 4)).end();
+            return;
+        }
+        else {
+            // Email is unique, let's insert
+            db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)",
+                [firstname, lastname, email, password],
+                (err, result) => {
+                    if(err) {
+                        console.error(err);
+                        res.status(412).json(util.getError("Something unexpected went wrong with the database insert", -1)).end();
+                        return;
+                    }
+                    else {
+                        const uid = result.insertId;
+                        res.status(200).json({
+                            "token": auth.encodeToken(uid),
+                            "email": email
+                        }).end();
+                    }
+                }
+            );
+        }
+    })
 
-    db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)",
-        [firstname, lastname, email, password],
-        (err, result, fields) => {
-            if(err) {
-                console.error(err);
-                res.status(412).json(util.getError("Something went wrong with the database insert", -1)).end();
-                return;
-            }
-            else {
-                const uid = result.insertId;
-                res.status(200).json({
-                    "token": auth.encodeToken(),
-                    "email": email
-                }).end();
-            }
-        });
 });
 module.exports = router;
 
