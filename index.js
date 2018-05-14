@@ -17,13 +17,23 @@ app.all('*', (req, res, next) => {
     let token = req.get('Authorization');
     if(!token)
     {
-        res.status(401).json(util.getError("No authentication headers were sent"));
+        res.status(401).json(util.getError("No authentication headers were sent")).end();
     }
     else
     {
-        db.query("SELECT * FROM user WHERE token = ?", [token]);
+        db.query("SELECT * FROM user WHERE token = ?", [token], (err, results, fields) => {
+            if(err) console.error(err);
+            if(results.length !== 1)
+            {
+                res.status(500).json(util.getError("Invalid auth token, please authenticate on /api/login"));
+            }
+            else
+            {
+                
+            }
+            next();
+        });
 
-        next();
     }
 });
 
