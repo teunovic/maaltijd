@@ -6,7 +6,7 @@ const util = require('../util.js');
 const auth = require('../auth/authentication.js');
 
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -28,17 +28,44 @@ router.post('/login', (req, res) => {
     });
 
 });
-router.post('/register', (req, res) => {
+router.post('/register', (req, res, next) => {
+    console.log("Checking registration");
     // TODO: Registration
-    const firstname = req.body.firstname;
-    const lastname = req.body.lastname;
-    const email = req.body.email;
-    const password = req.body.password;
+    const firstname = req.body.firstname || '';
+    const lastname = req.body.lastname || '';
+    const email = req.body.email || '';
+    const password = req.body.password || '';
 
-    db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)", [firstname, lastname, email, password]);
-        res.status(200).json({
-            "token": auth.encodeToken([email]),
-            "email": email
+    // Checking if first- and last name are valid
+    if(!firstname.match(/\w+(-\w+)?/))
+    {
+        res.status(412).json(util.getError("First nam")).end();
+        return;
+    }
+    if(!lastname.match(/\w+(-\w+)?/))
+    {
+        res.status(412).json(util.getError("Something went wrong with the database insert")).end();
+        return;
+    }
+
+    // Checking if the email is unique
+    db.query("SELECT ID FROM user WHERE Email = ? LIMIT 1", [email], )
+
+    db.query("INSERT INTO `user` (Voornaam, Achternaam, Email, Password) VALUES (?, ?, ?, ?)",
+        [firstname, lastname, email, password],
+        (err, result, fields) => {
+            if(err) {
+                console.error(err);
+                res.status(412).json(util.getError("Something went wrong with the database insert", -1)).end();
+                return;
+            }
+            else {
+                const uid = result.insertId;
+                res.status(200).json({
+                    "token": auth.encodeToken(),
+                    "email": email
+                }).end();
+            }
         });
 });
 module.exports = router;
