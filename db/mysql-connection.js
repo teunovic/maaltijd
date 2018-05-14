@@ -11,8 +11,6 @@ let con = mysql.createConnection({
 con.connect(function(err) {
     if (err) throw err;
     console.log("Database connected!");
-    con.query("SELECT * FROM maaltijd", function (err, result, fields) {
-        if (err) throw err;
-        console.log(fields);
-    });
 });
+
+module.exports = con;
