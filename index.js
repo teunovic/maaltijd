@@ -1,14 +1,15 @@
 const config = require('./config.json');
+const dbconf = require('./db/dbconfig.json');
 const express = require('express');
 const app = express();
 const http = require('http');
 const mysql = require('mysql');
 
 let con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "studentenhuis"
+    host: dbconf.dbServer,
+    user: dbconf.dbUsername,
+    password: dbconf.dbPassword,
+    database: dbconf.dbSchema
 });
 
 con.connect(function(err) {
