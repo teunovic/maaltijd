@@ -9,7 +9,12 @@ app.all('*', (req, res, next) => {
 });
 
 
-app.use('/api', require('./routes/routes_apiv1.js'));
+app.use('/api/studentenhuis', require('./routes/routes_studentenhuis.js'));
+app.use('/api/deelnemers', require('./routes/routes_deelnemers.js'));
+app.use('/api/maaltijd', require('./routes/routes_maaltijd'));
+app.use('/api/authentication', require('./routes/routes_authentication'));
+
+
 
 // Handle all errors
 app.use((err, req, res, next) => {
