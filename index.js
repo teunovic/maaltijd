@@ -3,7 +3,9 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const util = require('./util.js');
-
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.all('*', (req, res, next) => {
     console.log(req.method + " " + req.url);
@@ -11,10 +13,10 @@ app.all('*', (req, res, next) => {
 });
 
 // Define different versions of routes
+app.use('/api', require('./routes/routes_authentication.js'));
 app.use('/api/studentenhuis', require('./routes/routes_studentenhuis.js'));
 // app.use('/api/deelnemers', require('./routes/routes_deelnemers.js'));
 app.use('/api/studentenhuis', require('./routes/routes_maaltijd.js'));
-// app.use('/api/authentication', require('./routes/routes_authentication'));
 
 
 
