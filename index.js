@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const util = require('./util.js');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
