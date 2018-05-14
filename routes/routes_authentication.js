@@ -56,7 +56,7 @@ router.post('/register', (req, res, next) => {
 
     if(!(typeof password === 'string') || password == '' || password.length < 6 || password.length > 64)
     {
-        res.status(412).json(util.getError("Password must be between 6 and 64 characters", 3)).end();
+        res.status(412).json(util.getError("Password must be between 6 and 64 characters", 4)).end();
         return;
     }
 
@@ -64,7 +64,7 @@ router.post('/register', (req, res, next) => {
     db.query("SELECT ID FROM user WHERE Email = ? LIMIT 1", [email], (_err, _res) => {
         if(_err || _res.length === 1) {
             console.error(_err || 'Email taken');
-            res.status(412).json(util.getError("Email is taken", 4)).end();
+            res.status(412).json(util.getError("Email is taken", 5)).end();
             return;
         }
         else {
@@ -74,7 +74,7 @@ router.post('/register', (req, res, next) => {
                 (err, result) => {
                     if(err) {
                         console.error(err);
-                        res.status(412).json(util.getError("Something unexpected went wrong with the database insert", -1)).end();
+                        res.status(412).json(util.getError("Something unexpected went wrong with the database insert", 6)).end();
                         return;
                     }
                     else {
