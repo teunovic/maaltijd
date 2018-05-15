@@ -52,7 +52,7 @@ router.post('', (req, resp) => {
             resp.status(200);
             db.query("SELECT * FROM view_studentenhuis INNER JOIN studentenhuis ON studentenhuis.ID = view_studentenhuis.ID WHERE UserID = ?", [resp.locals.user['ID']], (err, result, fields) => {
                 if (err) console.error(err);
-                resp.json(result);
+                resp.json(result[0]);
             })
 
         }
