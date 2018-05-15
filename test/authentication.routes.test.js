@@ -14,9 +14,6 @@ let validToken;
 
 describe('Registration', () => {
     it('should return a token when providing valid information', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
         chai.request(server)
             .post('/api/register')
             .send(
@@ -33,8 +30,7 @@ describe('Registration', () => {
                 // res.body.should.be.a('object');
                 validToken = res.body.token;
                 module.exports = {
-                    token: validToken,
-                    server
+                    token: validToken
                 };
             });
         done()
@@ -100,12 +96,21 @@ describe('Registration', () => {
 describe('Login', () => {
 
     it('should return a token when providing valid information', (done) => {
-        //
-        // Hier schrijf je jouw testcase.
-        //
+        chai.request(server)
+            .post('/api/login')
+            .send(
+                {
+                    'email': 'test@avans.nl',
+                    'password': 'test123'
+                })
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.have.property(validToken);
+                res.should.have.property('email');
+                // res.body.should.be.a('object');
+                });
         done()
     });
-
     it('should throw an error when email does not exist', (done) => {
         //
         // Hier schrijf je jouw testcase.
