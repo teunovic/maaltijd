@@ -30,7 +30,7 @@ router.post('/:id/maaltijd/:maaltijdid/deelnemers', (req, resp) => {
     console.log("Deelnemers POST-request from user " + resp.locals.user['Voornaam'] + " " + resp.locals.user['Achternaam'] + " with UserID " + resp.locals.user['ID']);
 
     const id = req.params.id;
-    const maaltijdid= req.params.maaltijdid;
+    const maaltijdid = req.params.maaltijdid;
 
     const query = {
         sql: 'INSERT INTO `deelnemers` (UserID, StudentenhuisID, MaaltijdID) VALUES (?, ?, ?)',
@@ -40,8 +40,7 @@ router.post('/:id/maaltijd/:maaltijdid/deelnemers', (req, resp) => {
     console.log('QUERY: ' + query.sql);
     db.query( query, (error, rows, fields) => {
         if (error) {
-            resp.status(500).json(error.toString())
-            //TODO: Send error (duplication is still a thing)
+            resp.status(500).json(util.getError(error.toString()));
 
         } else {
             resp.status(200);
