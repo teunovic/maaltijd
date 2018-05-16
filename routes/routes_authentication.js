@@ -42,9 +42,19 @@ router.post('/register', (req, res, next) => {
         res.status(412).json(util.getError("First name is invalid", 1)).end();
         return;
     }
+    if(firstname.length < 2)
+    {
+        res.status(412).json(util.getError("First name is too short", 7)).end();
+        return;
+    }
     if(!(typeof lastname === 'string') || lastname == '' || !lastname.match(/\w+(-\w+)?/))
     {
         res.status(412).json(util.getError("Last name is invalid", 2)).end();
+        return;
+    }
+    if(firstname.length < 2)
+    {
+        res.status(412).json(util.getError("Last name is too short", 8)).end();
         return;
     }
 

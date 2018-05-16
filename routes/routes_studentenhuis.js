@@ -37,7 +37,7 @@ router.get('/:id?', (req, res) => {
     const huis = res.locals.huis;
     console.log("Studentenhuis request from user " + res.locals.user['Voornaam'] + ' ' + res.locals.user['Achternaam']);
     if(!id || !huis) {
-        db.query("SELECT * FROM studentenhuis", (err, result) => {
+        db.query("SELECT ID, Naam as naam, Adres as adres, Contact as contact, Email as email FROM view_studentenhuis", (err, result) => {
             if (err) console.error(err);
             res.json(result);
         })
