@@ -4,6 +4,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../index.js');
+const util = require('../util.js');
 const email = util.getNow() + '@testing.com';
 
 chai.should();
@@ -50,8 +51,8 @@ describe('Registration', () => {
         chai.request(server)
             .get('/api/register')
             .end((err, resp) => {
-                res.should.have.status(404);
-                const error = res.body;
+                resp.should.have.status(404);
+                const error = resp.body;
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
