@@ -83,6 +83,7 @@ router.post('/register', (req, res, next) => {
                             "token": auth.encodeToken(uid),
                             "email": email
                         }).end();
+                        return;
                     }
                 }
             );
@@ -98,6 +99,7 @@ router.all('*', (req, res, next) => {
     if(!token)
     {
         res.status(401).json(util.getError("No token was sent")).end();
+        return;
     }
     else
     {
