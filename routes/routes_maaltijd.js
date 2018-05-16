@@ -25,7 +25,7 @@ router.all('/:id/maaltijd/:maaltijdId*', (req, res, next) => {
         (err, results) => {
             if(err) console.error(err);
             else if(results.length !== 1) {
-                res.status(404).json(util.getError("Maaltijd bestaat niet"));
+                res.status(404).json(util.getError("Maaltijd bestaat niet", 3));
                 return;
             } else {
                 res.locals.maaltijd = new Maaltijd(results[0]['ID'], results[0]['naam'], results[0]['beschrijving'], results[0]['ingredienten'], results[0]['allergie'], results[0]['prijs'], results[0]['userid']);
@@ -47,7 +47,7 @@ router.get('/:id/maaltijd/:maaltijdId?', (req, res) => {
             (err, result, fields) => {
                 if (err) {
                     console.error(err);
-                    res.status(404).json(util.getError("HuisId bestaat niet"));
+                    res.status(404).json(util.getError("HuisId bestaat niet"),1);
                     return;
                 }
                 res.json(result).end();
