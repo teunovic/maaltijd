@@ -12,6 +12,7 @@ router.get('/:id/maaltijd/:maaltijdid/deelnemers/?', (req, res) => {
     const user = res.locals.user;
     const maaltijd = res.locals.maaltijd;
 
+
     db.query("SELECT * from `view_deelnemers` WHERE MaaltijdID = ?", [maaltijd.id], (err, result, fields) => {
         if(err) {
             console.error(err);
@@ -29,16 +30,19 @@ router.post('/:id/maaltijd/:mid/deelnemers/?', (req, res) => {
     const huis = res.locals.huis;
     const maaltijd = res.locals.maaltijd;
 
+    //Take part in maaltijd
+
     db.query("SELECT null FROM deelnemers WHERE UserID = ? AND StudentenhuisID = ? AND MaaltijdID = ? LIMIT 1",
         [user.ID, huis.id, maaltijd.id],
         (err, rows) => {
             if(err) console.error(err);
             else {
+                //Error for duplicate participation
                 if(rows.length === 1) {
                     res.status(409).json(util.getError("Al aangemeld op deze maaltijd")).end();
                     return;
                 }
-
+                
                 db.query("INSERT INTO deelnemers (UserID, StudentenhuisID, MaaltijdID) " +
                     "VALUES (? , ? , ?)", [user.ID, huis.id, maaltijd.id],
                     (err, result) => {

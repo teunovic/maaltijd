@@ -5,6 +5,8 @@ const db = require('../db/mysql-connection.js');
 const util = require('../util.js');
 const Maaltijd = require('../classes/Maaltijd.js');
 
+
+//Check permission of maaltijd is made by user
 function hasPermission(r, maaltijd, user) {
     return user.ID == maaltijd.userid || !r.status(409).json(util.getError("Geen toestemming om deze data te wijzigen", 1)).end();
 }
@@ -73,6 +75,8 @@ router.post('/:id/maaltijd', (req, res, next) => {
     const allergie = req.body.allergie || '';
     const prijs = req.body.prijs || -1;
 
+    //Errorhandling
+
     if(typeof naam !== 'string' || naam.length < 2 || naam.length > 32)
     {
         res.status(412).json(util.getError("Naam moet tussen 2 en 32 tekens zijn", 1)).end();
@@ -112,6 +116,8 @@ router.post('/:id/maaltijd', (req, res, next) => {
             console.error(error);
             res.status(500).json(util.getError(error.toString(), 1));
         } else {
+
+            //Online database had different column names...
             db.query("SELECT ID, Naam as naam, Beschrijving as beschrijving, Ingredienten as ingredienten, Allergie as allergie, Prijs as prijs, StudentenhuisID as huisid FROM maaltijd WHERE ID = ? AND StudentenhuisID = ? LIMIT 1",
                 [rows.insertId, huis.id],
                 (err, result) => {

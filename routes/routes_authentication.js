@@ -9,7 +9,7 @@ const auth = require('../auth/authentication.js');
 router.post('/login', (req, res, next) => {
     const email = req.body.email || '';
     const password = req.body.password || '';
-
+    // Check database if credentials match
     db.query("SELECT * FROM user WHERE Email = ? AND Password = ? LIMIT 1", [email, password], (err, result, fields) => {
         if(err) console.error(err);
         if(result.length !== 1)
@@ -18,6 +18,7 @@ router.post('/login', (req, res, next) => {
         }
         else
         {
+            // Generate new token for valid login
             console.log(result[0]);
             let newToken = auth.encodeToken(result[0]['ID']);
             res.status(200).json({
@@ -113,6 +114,7 @@ router.all('*', (req, res, next) => {
         return;
     }
     else
+        // Check if decodedtoken matches
     {
         auth.decodeToken(token, (err, payload) => {
             if(err) {
