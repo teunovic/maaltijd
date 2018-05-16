@@ -90,6 +90,38 @@ router.post('/register', (req, res, next) => {
     })
 
 });
+
+// Check authentication for all endpoints from here, all except login/register
+router.all('*', (req, res, next) => {
+    console.log(req.method + " " + req.url);
+    let token = req.get('Authorization');
+    if(!token)
+    {
+        res.status(401).json(util.getError("No token was sent")).end();
+    }
+    else
+    {
+        auth.decodeToken(token, (err, payload) => {
+            if(err) {
+                console.error(err);
+                res.status(401).json(util.getError("Token is invalid")).end();
+            }
+            else {
+                let uid = payload.userid;
+                console.log(payload);
+                db.query("SELECT * FROM user WHERE ID = ? LIMIT 1", [uid], (err, results, fields) => {
+                    if(err) console.error(err);
+                    if(results.length !== 1) {
+                        res.status(401).json(util.getError("Token has expired")).end();
+                    }
+                    res.locals.user = results[0];
+                    next();
+                });
+            }
+        });
+    }
+});
+
 module.exports = router;
 
 
