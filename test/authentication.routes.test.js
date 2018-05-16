@@ -4,6 +4,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../index.js');
+const email = util.getNow() + '@testing.com';
 
 chai.should();
 chai.use(chaiHttp);
@@ -20,7 +21,7 @@ describe('Registration', () => {
                 {
                     'firstname': 'testfirstname',
                     'lastname': 'testlastname',
-                    'email': 'test@avans.nl',
+                    'email': email,
                     'password': 'test123'
                 })
             .end((err, res) => {
@@ -46,6 +47,15 @@ describe('Registration', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('/api/register')
+            .end((err, resp) => {
+                res.should.have.status(404);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(1);
+                error.should.have.property('datetime');
+            });
         done()
     });
 
@@ -53,6 +63,24 @@ describe('Registration', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('/api/register')
+            .send({
+                'firstname': 'testfirstname',
+                'lastname': 'testlastname',
+                'email': email,
+                'password': 'test123'
+            })
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(5);
+                error.should.have.property('datetime');
+            });
+
+        //TODO: DELETE RECORDS...
+
         done()
     });
 
@@ -60,6 +88,20 @@ describe('Registration', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('/api/register')
+            .send({
+                'lastname': 'testlastname',
+                'email': email,
+                'password': 'test123'
+            })
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(1);
+                error.should.have.property('datetime');
+            });
         done()
     });
 
@@ -67,13 +109,44 @@ describe('Registration', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+
+        chai.request(server)
+            .get('/api/register')
+            .send({
+                'firstname': 't',
+                'lastname': 'testlastname',
+                'email': email,
+                'password': 'test123'
+            })
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(7);
+                error.should.have.property('datetime');
+            });
         done()
     });
+
 
     it('should throw an error when no lastname is provided', (done) => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('/api/register')
+            .send({
+                'firstname': 'testfirstname',
+                'email': email,
+                'password': 'test123'
+            })
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(2);
+                error.should.have.property('datetime');
+            });
         done()
     });
 
@@ -81,6 +154,21 @@ describe('Registration', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('/api/register')
+            .send({
+                'firstname': 'testfirstname',
+                'lastname': 't',
+                'email': email,
+                'password': 'test123'
+            })
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(8);
+                error.should.have.property('datetime');
+            });
         done()
     });
 
@@ -88,6 +176,21 @@ describe('Registration', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .get('/api/register')
+            .send({
+                'firstname': 'testfirstname',
+                'lastname': 'testlastname',
+                'email': email,
+                'password': 'test123'
+            })
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(5);
+                error.should.have.property('datetime');
+            });
         done()
     })
 
@@ -100,7 +203,7 @@ describe('Login', () => {
             .post('/api/login')
             .send(
                 {
-                    'email': 'test@avans.nl',
+                    'email': email,
                     'password': 'test123'
                 })
             .end((err, res) => {
@@ -108,13 +211,30 @@ describe('Login', () => {
                 res.should.have.property(validToken);
                 res.should.have.property('email');
                 // res.body.should.be.a('object');
-                });
+            });
         done()
     });
     it('should throw an error when email does not exist', (done) => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .post('/api/login')
+            .send(
+                {
+                    'email': 'thisemaildoesntexistyet@email.nl',
+                    'password': 'test123'
+                }
+            )
+            .end((err, res) => {
+
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(1);
+                error.should.have.property('datetime');
+
+            });
         done()
     });
 
@@ -122,13 +242,45 @@ describe('Login', () => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .post('/api/login')
+            .send(
+                {
+                    'email': email,
+                    'password': 'thispasswordisinvalid123'
+                }
+            )
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(1);
+                error.should.have.property('datetime');
+
+            });
         done()
     });
+
 
     it('should throw an error when using an invalid email', (done) => {
         //
         // Hier schrijf je jouw testcase.
         //
+        chai.request(server)
+            .post('/api/login')
+            .send(
+                {
+                    'password': 'thispasswordisinvalid123'
+                }
+            )
+            .end((err, res) => {
+                res.should.have.status(412);
+                const error = res.body;
+                error.should.have.property('message');
+                error.should.have.property('code').equals(1);
+                error.should.have.property('datetime');
+
+            });
         done()
     });
 });
