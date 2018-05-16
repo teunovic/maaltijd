@@ -21,7 +21,7 @@ router.all('/:id*', (req, res, next) => {
             if(err) console.error(err);
             else {
                 if(results.length !== 1) {
-                    res.status(404).json(util.getError("Niet gevonden (huisId bestaat niet)", 1)).end();
+                    res.status(404).json(util.getError("Niet gevonden (huisId bestaat niet)", 2)).end();
                     return;
                 }
 
@@ -126,7 +126,6 @@ router.post('^/?$', (req, res) => {
         res.status(412).json(util.getError("Het adres moet tussen 4 en 64 tekens zijn", 2)).end();
         return;
     }
-    console.log('QUERY: ' + query.sql);
 
     db.query("INSERT INTO `studentenhuis` (Naam, Adres, UserID) VALUES (?, ?, ?)",
         [naam, adres, res.locals.user['ID']],

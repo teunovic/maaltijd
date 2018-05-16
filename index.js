@@ -14,8 +14,8 @@ app.use('/api', require('./routes/routes_authentication.js'));
 
 // Define different versions of routes
 app.use('/api/studentenhuis', require('./routes/routes_studentenhuis.js'));
-app.use('/api/studentenhuis', require('./routes/routes_deelnemers.js'));
 app.use('/api/studentenhuis', require('./routes/routes_maaltijd.js'));
+app.use('/api/studentenhuis', require('./routes/routes_deelnemers.js'));
 
 
 app.use('*', (req, res, next) => {
