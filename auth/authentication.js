@@ -6,7 +6,7 @@ function encodeToken(id) {
     const payload = {
         exp: moment().add(1, 'hours').unix(),
         iat: moment().unix(),
-        userid: id + ''
+        userid: id
     };
     return jwt.encode(payload, settings.secretkey);
 }
