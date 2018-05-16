@@ -21,7 +21,7 @@ router.all('/:id*', (req, res, next) => {
             if(err) console.error(err);
             else {
                 if(results.length !== 1) {
-                    res.status(500).json(util.getError("Studentenhuis bestaat niet")).end();
+                    res.status(404).json(util.getError("Niet gevonden (huisId bestaat niet)", 1)).end();
                     return;
                 }
 
@@ -47,34 +47,108 @@ router.get('/:id?', (req, res) => {
     }
 });
 
+router.delete('^/:id?/?$', (req, res) => {
+    const user = res.locals.user;
+    const huis = res.locals.huis;
+
+    if(!req.params.id) {
+        res.status(412).json(util.getError("Een of meer properties in de request body ontbreken of zijn foutief")).end();
+        return;
+    }
+
+    if(huis.userid !== user.ID) {
+        res.status(409).json(util.getError("Conflict (Gebruiker mag deze data niet wijzigen)", -1)).end();
+        return;
+    }
+
+    db.query("DELETE FROM studentenhuis WHERE ID = ? LIMIT 1", [huis.id], (err, result) => {
+        if(err) console.error(err);
+        else {
+            res.json({}).end();
+        }
+    });
+});
+
+router.put('^/:id/?$', (req, res) => {
+    const user = res.locals.user;
+    const huis = res.locals.huis;
+
+    if(huis.userid !== user.ID) {
+        res.status(409).json(util.getError("Conflict (Gebruiker mag deze data niet wijzigen)", -1)).end();
+        return;
+    }
+
+    let naam = req.body.naam || '';
+    let adres = req.body.adres || '';
+
+    if(naam == '' || naam.length > 64 || naam.length < 1) {
+        res.status(412).json(util.getError("De naam moet tussen 1 en 64 tekens zijn", 1)).end();
+        return;
+    }
+
+    if(adres == '' || adres.length > 64 || adres.length < 4) {
+        res.status(412).json(util.getError("Het adres moet tussen 4 en 64 tekens zijn", 2)).end();
+        return;
+    }
+
+    db.query("UPDATE studentenhuis SET Naam = ? , Adres = ? WHERE ID = ? LIMIT 1",
+        [naam, adres, huis.id],
+        (err, result) => {
+        if(err) console.error(err);
+        else {
+            db.query("SELECT * FROM studentenhuis WHERE ID = ?", [huis.id], (err, result) => {
+                if(err || result.length !== 1) console.error(err);
+                else {
+                    res.json(result[0]).end();
+                }
+            })
+        }
+    });
+
+});
+
 //POST-requests || Studentenhuis
 
 
-router.post('', (req, resp) => {
+router.post('^/?$', (req, res) => {
+    console.log("Studentenhuis post from user " + res.locals.user['Voornaam'] + " " + res.locals.user['Achternaam'] + " with UserID " + res.locals.user['ID'])
 
-    console.log("Studentenhuis post from user " + resp.locals.user['Voornaam'] + " " + resp.locals.user['Achternaam'] + " with UserID " + resp.locals.user['ID'])
+    // Checking post body
+    let naam = req.body.naam || '';
+    let adres = req.body.adres || '';
 
-    let info = req.body;
-    const query = {
-        sql: 'INSERT INTO `studentenhuis` (Naam, Adres, UserID) VALUES (?, ?, ?)',
-        values: [info.naam, info.adres, resp.locals.user['ID']],
-        timeout: 2000
-    };
+    if(naam == '' || naam.length > 64 || naam.length < 1) {
+        res.status(412).json(util.getError("De naam moet tussen 1 en 64 tekens zijn", 1)).end();
+        return;
+    }
+
+    if(adres == '' || adres.length > 64 || adres.length < 4) {
+        res.status(412).json(util.getError("Het adres moet tussen 4 en 64 tekens zijn", 2)).end();
+        return;
+    }
     console.log('QUERY: ' + query.sql);
 
-    db.query( query, (error, rows, fields) => {
-        if (error) {
-            resp.status(500).json(error.toString())
-        } else {
-            resp.status(200);
-            db.query("SELECT * FROM view_studentenhuis INNER JOIN studentenhuis ON studentenhuis.ID = view_studentenhuis.ID WHERE UserID = ?", [resp.locals.user['ID']], (err, result, fields) => {
-                if (err) console.error(err);
-                resp.json(result[0]);
-            })
+    db.query("INSERT INTO `studentenhuis` (Naam, Adres, UserID) VALUES (?, ?, ?)",
+        [naam, adres, res.locals.user['ID']],
+        (error, rows) => {
+            if (error) {
+                res.status(500).json(util.getError(error.toString(), -1)).end();
+                return;
+            } else {
+                db.query("SELECT * FROM view_studentenhuis WHERE ID = ? LIMIT 1",
+                    [rows.insertId],
+                    (err, result) => {
+                        if (err) console.error(err);
+                        res.json(result[0]);
+                    }
+                );
 
+            }
         }
-    })
+    );
 });
+
+
 
 module.exports = router;
 
