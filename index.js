@@ -30,3 +30,5 @@ const port = process.env.PORT || config.port;
 app.listen(port, () => {
     console.log('server is ready at port: ' + port)
 });
+
+module.exports = app;
