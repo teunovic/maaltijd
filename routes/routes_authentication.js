@@ -28,7 +28,7 @@ router.post('/login', (req, res, next) => {
     });
 
 });
-router.post('/register', (req, res, next) => {
+router.post('/register', (req, res) => {
     console.log("Checking registration");
     // TODO: Registration
     const firstname = req.body.firstname || '';
@@ -117,7 +117,7 @@ router.all('*', (req, res, next) => {
         auth.decodeToken(token, (err, payload) => {
             if(err) {
                 console.error(err);
-                res.status(401).json(util.getError("Token is invalid")).end();
+                res.status(401).json(util.getError("Token is invalid", 1)).end();
             }
             else {
                 let uid = payload.userid;
