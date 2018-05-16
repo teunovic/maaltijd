@@ -52,7 +52,7 @@ describe('Registration', () => {
         chai.request(server)
             .get('/api/register')
             .end((err, resp) => {
-                resp.should.have.status(412);
+                resp.should.have.status(404);
                 const error = resp.body;
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
@@ -66,7 +66,7 @@ describe('Registration', () => {
         // Hier schrijf je jouw testcase.
         //
         chai.request(server)
-            .get('/api/register')
+            .post('/api/register')
             .send({
                 'firstname': 'testfirstname',
                 'lastname': 'testlastname',
@@ -91,14 +91,14 @@ describe('Registration', () => {
         // Hier schrijf je jouw testcase.
         //
         chai.request(server)
-            .get('/api/register')
+            .post('/api/register')
             .send({
                 'lastname': 'testlastname',
                 'email': email,
                 'password': 'test123'
             })
             .end((err, res) => {
-                err.should.have.status(412);
+                res.should.have.status(412);
                 const error = res.body;
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
@@ -113,7 +113,7 @@ describe('Registration', () => {
         //
 
         chai.request(server)
-            .get('/api/register')
+            .post('/api/register')
             .send({
                 'firstname': 't',
                 'lastname': 'testlastname',
@@ -136,7 +136,7 @@ describe('Registration', () => {
         // Hier schrijf je jouw testcase.
         //
         chai.request(server)
-            .get('/api/register')
+            .post('/api/register')
             .send({
                 'firstname': 'testfirstname',
                 'email': email,
@@ -157,7 +157,7 @@ describe('Registration', () => {
         // Hier schrijf je jouw testcase.
         //
         chai.request(server)
-            .get('/api/register')
+            .post('/api/register')
             .send({
                 'firstname': 'testfirstname',
                 'lastname': 't',
@@ -179,7 +179,7 @@ describe('Registration', () => {
         // Hier schrijf je jouw testcase.
         //
         chai.request(server)
-            .get('/api/register')
+            .post('/api/register')
             .send({
                 'firstname': 'testfirstname',
                 'lastname': 'testlastname',
