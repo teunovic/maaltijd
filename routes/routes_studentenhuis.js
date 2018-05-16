@@ -19,7 +19,7 @@ router.get('/:id?', (req, resp) => {
             if(result.length !== 1) {
                 resp.status(404).json(util.getError("HuisId bestaat niet"));
             } else {
-                resp.json(result);
+                resp.json(result[0]);
             }
         })
     }
