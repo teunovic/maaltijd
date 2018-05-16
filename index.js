@@ -19,7 +19,7 @@ app.use('/api/studentenhuis', require('./routes/routes_maaltijd.js'));
 
 
 app.use('*', (req, res, next) => {
-    res.status(400).json(util.getError("Could not access endpoint")).end();
+    res.status(404).json(util.getError("Endpoint not found", 1)).end();
 });
 
 //Define port

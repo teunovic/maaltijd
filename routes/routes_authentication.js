@@ -7,14 +7,14 @@ const auth = require('../auth/authentication.js');
 
 
 router.post('/login', (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const email = req.body.email || '';
+    const password = req.body.password || '';
 
     db.query("SELECT * FROM user WHERE Email = ? AND Password = ? LIMIT 1", [email, password], (err, result, fields) => {
         if(err) console.error(err);
         if(result.length !== 1)
         {
-            res.status(412).json(util.getError("Invalid credentials"));
+            res.status(412).json(util.getError("Invalid credentials", 1));
         }
         else
         {
