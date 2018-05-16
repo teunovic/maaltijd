@@ -104,6 +104,7 @@ router.post('/register', (req, res, next) => {
 
 // Check authentication for all endpoints from here, all except login/register
 router.all('*', (req, res, next) => {
+    if(req.url == '/register' || req.url == '/login') return next();
     console.log(req.method + " " + req.url);
     let token = req.get('Authorization');
     if(!token)
