@@ -50,7 +50,7 @@ describe('Registration', () => {
         chai.request(server)
             .get('/api/register')
             .end((err, resp) => {
-                res.should.have.status(404);
+                resp.should.have.status(404);
                 const error = res.body;
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
