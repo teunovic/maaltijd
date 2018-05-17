@@ -22,8 +22,8 @@ describe('Maaltijd API GET', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done();
             });
-        done()
     });
 
     it('should throw an error when using invalid roomnumber ', (done) => {
@@ -38,8 +38,8 @@ describe('Maaltijd API GET', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done();
             });
-        done()
     });
 });
 
@@ -63,7 +63,7 @@ describe('Maaltijd API PUT', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done();
             });
-        done()
     });
 });

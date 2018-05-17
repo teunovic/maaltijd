@@ -35,8 +35,8 @@ describe('Registration', () => {
                 module.exports = {
                     token: validToken
                 };
+                done()
             });
-        done()
     });
 
 
@@ -57,8 +57,8 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done()
             });
-        done()
     });
 
     it('should throw an error when the user already exists', (done) => {
@@ -79,11 +79,9 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(5);
                 error.should.have.property('datetime');
+                done()
             });
 
-        //TODO: DELETE RECORDS...
-
-        done()
     });
 
     it('should throw an error when no firstname is provided', (done) => {
@@ -103,8 +101,8 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done()
             });
-        done()
     });
 
     it('should throw an error when firstname is shorter than 2 chars', (done) => {
@@ -126,8 +124,8 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(7);
                 error.should.have.property('datetime');
+                done()
             });
-        done()
     });
 
 
@@ -148,8 +146,8 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(2);
                 error.should.have.property('datetime');
+                done()
             });
-        done()
     });
 
     it('should throw an error when lastname is shorter than 2 chars', (done) => {
@@ -170,8 +168,8 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(8);
                 error.should.have.property('datetime');
+                done()
             });
-        done()
     });
 
     it('should throw an error when email is invalid', (done) => {
@@ -192,8 +190,8 @@ describe('Registration', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(5);
                 error.should.have.property('datetime');
+                done()
             });
-        done()
     })
 
 });
@@ -213,8 +211,8 @@ describe('Login', () => {
                 res.should.have.property(validToken);
                 res.should.have.property('email');
                 // res.body.should.be.a('object');
+                done()
             });
-        done()
     });
     it('should throw an error when email does not exist', (done) => {
         //
@@ -235,9 +233,8 @@ describe('Login', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
-
+                done()
             });
-        done()
     });
 
     it('should throw an error when email exists but password is invalid', (done) => {
@@ -258,9 +255,8 @@ describe('Login', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
-
+                done()
             });
-        done()
     });
 
 
@@ -281,9 +277,8 @@ describe('Login', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
-
+                done()
             });
-        done()
     });
 });
 

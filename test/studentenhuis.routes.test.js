@@ -29,9 +29,9 @@ describe('Studentenhuis API POST', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done();
             });
 
-        done()
     });
 
     it('should return a studentenhuis when posting a valid object', (done) => {
@@ -56,9 +56,8 @@ describe('Studentenhuis API POST', () => {
                 success.should.have.property('adres').equals('testadres');
                 success.should.have.property('contact');
                 success.should.have.property('email');
-
+                done();
             });
-        done()
     });
 
     it('should throw an error when naam is missing', (done) => {
@@ -79,9 +78,8 @@ describe('Studentenhuis API POST', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
-
+                done();
             });
-        done()
     });
 
     it('should throw an error when adres is missing', (done) => {
@@ -102,9 +100,8 @@ describe('Studentenhuis API POST', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(2);
                 error.should.have.property('datetime');
-
+                done();
             });
-        done()
     })
 });
 
@@ -124,8 +121,8 @@ describe('Studentenhuis API GET all', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done();
             });
-        done()
     });
 
     it('should return all studentenhuizen when using a valid token', (done) => {
@@ -146,8 +143,8 @@ describe('Studentenhuis API GET all', () => {
                 success.body.should.have.property('adres');
                 success.body.should.have.property('contact');
                 success.body.should.have.property('email');
+                done();
             });
-        done()
     })
 });
 
@@ -167,8 +164,8 @@ describe('Studentenhuis API GET one', () => {
                 error.should.have.property('message');
                 error.should.have.property('code').equals(1);
                 error.should.have.property('datetime');
+                done();
             });
-        done()
     });
 
     it('should return the correct studentenhuis when using an existing huisId', (done) => {
@@ -189,8 +186,8 @@ describe('Studentenhuis API GET one', () => {
                 success.body.should.have.property('adres');
                 success.body.should.have.property('contact');
                 success.body.should.have.property('email');
+                done();
             });
-        done()
     });
 
     it('should return an error when using an non-existing huisId', (done) => {
@@ -206,10 +203,10 @@ describe('Studentenhuis API GET one', () => {
                 res.should.have.status(404);
                 const error = res.body;
                 error.should.have.property('message');
-                error.should.have.property('code'); //TODO: CODE NOT MENTIONED
+                error.should.have.property('code');
                 error.should.have.property('datetime');
+                done();
             });
-        done()
     })
 });
 

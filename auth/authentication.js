@@ -12,7 +12,10 @@ function encodeToken(id) {
 }
 
 function decodeToken(token, cb) {
-
+    if(!token) {
+        cb("invalid token", null);
+        return;
+    }
     try {
         const payload = jwt.decode(token, settings.secretkey);
 
